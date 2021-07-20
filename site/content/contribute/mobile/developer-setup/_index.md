@@ -79,14 +79,22 @@ $ npm -g install react-native-cli
 #### Install Ruby
 ##### Windows 10
 - Install Ruby from [here](https://rubyinstaller.org/)
+
+##### MacOs
+
+While MacOS supplies a Ruby environment, it's being deprecated and it will only suffice if your architecture is Intel-based. For M1-based architecture, it's recommended to install Ruby using Homebrew.
+
+```sh
+$ brew install ruby
+```
 #### Install Git
 ##### Windows 10
 - Install git from [here](https://git-scm.com/download/win)
 
-#### Install `bundler --version 2.0.2` gem
+#### Install `bundler --version 2.1.4` gem
 
 ```sh
-$ gem install bundler --version 2.0.2
+$ gem install bundler --version 2.1.4
 ```
 #### Obtaining the source code
 
