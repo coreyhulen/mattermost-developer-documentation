@@ -21,7 +21,8 @@ https://github.com/mattermost/mattermost-server
 The server consists of several different Go packages:
 
 * `api4` - Version 4 of the RESTful JSON Web Service
-* `app` - Logic layer for getting, modifying, and interacting with models
+* `app` - Logic layer for getting, modifying, and interacting with models. Anything that interact with different services, put the information together, and give a result, should go here
+* `services` - Set of packages providing functionality to the rest of the application, especially to the `app` package
 * `cmd` - Command line interface
 * `einterfaces` - Interfaces for Enterprise Edition features
 * `jobs` - Job server and scheduling
@@ -29,3 +30,22 @@ The server consists of several different Go packages:
 * `store` - Storage layer for interacting with caches and databases
 * `utils` - Utility functions for various tasks
 * `web` - Serves static pages
+
+## Package Design Guide
+
+We are trying to follow certain rules about when is needed to create a new
+package or add functionality to the existing ones (Some of them can not fit
+with the current implementation because it is an ongoing effort).
+
+* Any integration with a third party tool should be implemented as an
+  independent service (Examples: Bleve, Cache, File backends).
+* Any well isolated chunk of code that has a very small public API and a lot of
+  code behind, should be separated into a service (Examples: Import/Export,
+  Tracing, Telemetry)
+* Any package should expose the minimal API needed, trying to avoid any public
+  function or method that is not used from the outside.
+* If you are validating inputs from the user or permissions, you should do it
+  in the external layers (e.g. `api4`, `web`, `app/slashcommands`).
+* If you are initializing something (for example a new service) that is going
+  to be there for the whole time the server is running, you should be adding it
+  to the `app.Server` data structure, probably in the `app/server.go` file.
